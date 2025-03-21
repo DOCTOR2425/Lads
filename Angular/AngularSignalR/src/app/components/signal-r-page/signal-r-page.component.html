@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="forms-container">
+    <form [formGroup]="connectForm" (ngSubmit)="connectTo()">
+      <div>
+        <label for="sender">Ваше имя:</label>
+        <input id="sender" formControlName="sender" />
+      </div>
+      <button type="submit" [disabled]="connectForm.invalid">
+        Подключиться
+      </button>
+    </form>
+
+    <form [formGroup]="signalForm" (ngSubmit)="sendSignal()">
+      <div class="form-inline">
+        <div>
+          <label for="receiverName">Имя получателя:</label>
+          <input id="receiverName" formControlName="receiverName" />
+        </div>
+        <div>
+          <label for="message">Сообщение:</label>
+          <input id="message" formControlName="message" />
+        </div>
+      </div>
+      <button type="submit" [disabled]="signalForm.invalid">Отправить</button>
+    </form>
+
+    <form [formGroup]="fileForm" (ngSubmit)="uploadFile()">
+      <div>
+        <label for="file">Выберите файл:</label>
+        <input id="file" type="file" (change)="onFileSelected($event)" />
+      </div>
+      <button type="submit" [disabled]="!selectedFile">Загрузить файл</button>
+    </form>
+
+    <form>
+      <button (click)="sendNullPost()">Отправить пустой POST</button>
+    </form>
+  </div>
+
+  <div class="messages-container">
+    <h3>Сообщения:</h3>
+    <ul>
+      <li *ngFor="let msg of allMessages">{{ msg }}</li>
+    </ul>
+  </div>
+</div>
