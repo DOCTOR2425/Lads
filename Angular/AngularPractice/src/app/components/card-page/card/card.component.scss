@@ -1,0 +1,29 @@
+:host  {
+    width: 225px;
+    height: 135px;
+    border-radius: 15px;
+    padding: 20px;
+    background: linear-gradient(to right, #000000, #FFA500);
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .name {
+        font-size: 1.1em;
+        font-weight: bold;
+    }
+    
+    .card-number 
+    {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+    }
+      
+    .balance, .format {
+        font-size: 1em;
+    }
+  }
+  

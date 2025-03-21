@@ -1,0 +1,17 @@
+<h2>Кредит на 100 тыс.руб под 1%</h2>
+
+<label>
+  Колличество лет:
+  <input
+    type="range"
+    min="1"
+    max="10"
+    step="1"
+    [value]="years()"
+    (input)="update($event)"
+  />
+  {{ years() }}
+</label>
+
+<p>Суммарно заплатит: {{ totalPayment() | currencyFormat : "RUB" }}</p>
+<p>Переплатит: {{ overpayment() | currencyFormat : "RUB" }}</p>

@@ -1,0 +1,24 @@
+<div>
+  <h2>Math API</h2>
+  <p *ngIf="mathError">Error: {{ mathError }}</p>
+  <button (click)="addNumbers()">Add 2 and 3</button>
+</div>
+
+<div>
+  <h2>Weather API</h2>
+  <p *ngIf="weatherError">Error: {{ weatherError }}</p>
+  <button (click)="getWeatherForecast()">Get Forecast</button>
+</div>
+
+<div>
+  <h2>User API</h2>
+  <p *ngIf="userError">Error: {{ userError }}</p>
+  <button (click)="getUserInfo()">Get User Info</button>
+</div>
+
+<div>
+  <h2>Null POST</h2>
+  <p>Response: {{ nullPostInfo?.text }}</p>
+  <p *ngIf="nullPostError">Error: {{ nullPostError }}</p>
+  <button (click)="postNull()">Post null payload</button>
+</div>

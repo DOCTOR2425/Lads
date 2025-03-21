@@ -1,0 +1,19 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <label for="cardName">Наименование карты:</label>
+  <input type="text" id="cardName" formControlName="cardName" required />
+
+  <label for="cardBalance">Баланс:</label>
+  <input
+    type="number"
+    id="cardBalance"
+    formControlName="cardBalance"
+    required
+  />
+
+  <label for="currency">Валюта:</label>
+  <select id="currency" formControlName="currency" required>
+    <option value="BYN">BYN</option>
+    <option value="USD">USD</option>
+  </select>
+  <button type="submit" [disabled]="!form.valid">Добавить карту</button>
+</form>

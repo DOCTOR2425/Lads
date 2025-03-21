@@ -1,0 +1,39 @@
+:host
+{
+    
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        border: 1px solid #ffa500;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      
+      .news-card-image img {
+        width: 100%;
+        height: auto;
+      }
+      
+      .news-card-content {
+        padding: 15px;
+        background-color: #fff;
+      }
+      
+      .news-card-title {
+        font-size: 1.5em;
+        margin: 0 0 10px;
+      }
+      
+      .news-card-description {
+        font-size: 1em;
+        color: #555;
+        margin: 0 0 15px;
+      }
+      
+      .news-card-link {
+        text-decoration: none;
+        color: #007BFF;
+        font-weight: bold;
+      }
+      
+}

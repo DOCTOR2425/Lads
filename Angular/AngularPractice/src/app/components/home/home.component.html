@@ -1,0 +1,9 @@
+<div class="home">
+  <button (click)="ViewCard('news')">Добавить новости</button>
+  <button (click)="ViewCard('discount')">Отобразить скидки</button>
+  <button (click)="ViewCard('not-card')">Отобразить другое</button>
+  <button (click)="ViewCard('signal')">Отобразить сигнал</button>
+  <ng-template #dynamicContainer> </ng-template>
+
+  <img loading="lazy" *ngFor="let img of images" [src]="img" />
+</div>

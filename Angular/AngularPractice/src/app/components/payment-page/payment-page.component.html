@@ -1,0 +1,13 @@
+<button (click)="pay()">Сделать платёж</button>
+<br />
+<button (click)="sendSignal()">Отправить сигнал</button>
+<br />
+<button (click)="serviceWorker()">ServiceWorker</button>
+<label>Время последнего запроса: {{ countData }}</label>
+<br />
+<label>Автозагрузка через ServiceWorker: {{ timeData }}</label>
+<br />
+<h3>Сообщения:</h3>
+<ul>
+  <li *ngFor="let message of displayedMessages">{{ message }}</li>
+</ul>
