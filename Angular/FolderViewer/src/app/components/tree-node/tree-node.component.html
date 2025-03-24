@@ -1,0 +1,9 @@
+<ul>
+  <li
+    *ngFor="let folder of nodeTree.children"
+    (click)="selectFolder(folder.name, $event)"
+  >
+    {{ folder.name }}
+    <app-tree-node *ngIf="folder" [nodeTree]="folder"></app-tree-node>
+  </li>
+</ul>

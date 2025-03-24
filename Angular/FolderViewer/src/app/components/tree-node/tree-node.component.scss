@@ -1,0 +1,19 @@
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #eef5ff;
+  cursor: pointer;
+}
+
+:host {
+  display: block;
+  margin-left: 20px;
+}

@@ -1,1 +1,54 @@
-<p>folder-page works!</p>
+<div class="container">
+  <div class="left" id="directoryViewer" #directoryViewer>
+    <app-tree-node
+      *ngIf="directory && directory.children"
+      [nodeTree]="directory"
+    ></app-tree-node>
+  </div>
+  <div class="right">
+    <div class="select-element">
+      {{ selectedObject }}
+    </div>
+
+    <div class="form-container create-form">
+      <form (ngSubmit)="create()">
+        <h3>Создать элемент в выбранной папке</h3>
+        <br />
+        <select [(ngModel)]="selectedObjectType" name="objectTypeSelect">
+          <option [value]="true">папка</option>
+          <option [value]="false">файл</option>
+        </select>
+        <br />
+        <input
+          name="nameInput"
+          placeholder="Имя файла или папки"
+          [(ngModel)]="inputName"
+        />
+        <br />
+        <button type="submit" [disabled]="!inputName">Создать</button>
+      </form>
+    </div>
+
+    <div class="form-container delete-form">
+      <form (ngSubmit)="deleteFolder()">
+        <h3>Удалить выбранный элемент</h3>
+        <br />
+        <button type="submit">Удалить</button>
+      </form>
+    </div>
+
+    <div class="form-container rename-form">
+      <form (ngSubmit)="changeName()">
+        <h3>Переименовать выбранный элемент</h3>
+        <br />
+        <input
+          name="newNameInput"
+          placeholder="Новое имя файла или папки"
+          [(ngModel)]="newName"
+        />
+        <br />
+        <button type="submit" [disabled]="!newName">Переименовать</button>
+      </form>
+    </div>
+  </div>
+</div>

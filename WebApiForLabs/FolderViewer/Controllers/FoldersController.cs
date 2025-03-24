@@ -3,66 +3,67 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FolderViewer.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class FoldersController : ControllerBase
-    {
-        private readonly string Folder = "D:\\Labs\\WebApiForLabs\\FolderViewer\\FolderToView";
+	[Route("api/[controller]")]
+	[ApiController]
+	public class FoldersController : ControllerBase
+	{
+		private readonly string Folder = Directory.GetCurrentDirectory() + "\\FolderToView\\";
 
-        [HttpGet("get-directory")]
-        public async Task<IActionResult> GetDirectory()
-        {
-            DirectoryTree tree = new DirectoryTree(Folder);
+		[HttpGet("get-directory")]
+		public async Task<IActionResult> GetDirectory()
+		{
+			DirectoryTree tree = new DirectoryTree(Folder);
+			return Ok(tree);
+		}
 
-            return Ok(tree);
-        }
+		[HttpDelete]
+		public async Task<IActionResult> Delete(
+			[FromQuery] string path)
+		{
+			string target = Folder + path;
+			if (Directory.Exists(target))
+				Directory.Delete(target, true);
+			else if (System.IO.File.Exists(target))
+				System.IO.File.Delete(target);
 
-        [HttpDelete("{path}")]
-        public async Task<IActionResult> Delete(string path)
-        {
-            if (path.Contains(Folder) == false)
-                throw new InvalidOperationException("Нельзя удалить путь вне " + Folder);
+			DirectoryTree tree = new DirectoryTree(Folder);
+			return Ok(tree);
+		}
 
-            if (Directory.Exists(path))
-                Directory.Delete(path, true);
-            else if (System.IO.File.Exists(path))
-                System.IO.File.Delete(path);
+		[HttpPut]
+		public async Task<IActionResult> ChangeName(
+			[FromQuery] string oldName,
+			[FromQuery] string newName)
+		{
+			oldName = Folder + oldName.TrimEnd(' ', '\\');
+			string newFullName = oldName.Substring(0, oldName.LastIndexOf("\\") + 1) + newName;
 
-            DirectoryTree tree = new DirectoryTree(Folder);
-            return Ok(tree);
-        }
+			if (Directory.Exists(oldName) &&
+				Directory.Exists(newFullName) == false)
+				Directory.Move(oldName, newFullName);
+			else if (System.IO.File.Exists(oldName) &&
+				System.IO.File.Exists(newFullName) == false)
+				System.IO.File.Move(oldName, newFullName);
 
-        [HttpPut("change-name/{oldFullName}/{newName}")]
-        public async Task<IActionResult> ChangeName(string oldFullName, string newName)
-        {
-            if (oldFullName.Contains(Folder) == false)
-                throw new InvalidOperationException("Нельзя изменить путь вне " + Folder);
+			DirectoryTree tree = new DirectoryTree(Folder);
+			return Ok(tree);
+		}
 
-            oldFullName = oldFullName.TrimEnd(' ', '\\');
-            string newFullName = oldFullName.Substring(0, oldFullName.LastIndexOf("\\") + 1) + newName;
+		[HttpPost("create")]
+		public async Task<IActionResult> Create(
+			[FromQuery] bool isFolder,
+			[FromQuery] string name)
+		{
+			if (Directory.Exists(Folder + name.Substring(0, name.LastIndexOf("\\"))) == false)
+				throw new ArgumentException("Нельзя создать объект не в папке\n" + name);
 
-            if (Directory.Exists(oldFullName))
-                Directory.Move(oldFullName, newFullName);
-            else if (System.IO.File.Exists(oldFullName))
-                System.IO.File.Move(oldFullName, newFullName);
+			if (isFolder && Directory.Exists(name) == false)
+				Directory.CreateDirectory(Folder + name);
+			else if (System.IO.File.Exists(name) == false)
+				System.IO.File.Create(Folder + name).Close();
 
-            DirectoryTree tree = new DirectoryTree(Folder);
-            return Ok(tree);
-        }
-
-        [HttpPost("create/{objectFlag}/{fullName}")]
-        public async Task<IActionResult> Create(bool objectFlag, string fullName)
-        {
-            if (fullName.Contains(Folder) == false)
-                throw new InvalidOperationException("Нельзя создать путь вне " + Folder);
-
-            if (objectFlag)
-                Directory.CreateDirectory(fullName);
-            else
-                System.IO.File.Create(fullName);
-
-            DirectoryTree tree = new DirectoryTree(Folder);
-            return Ok(tree);
-        }
-    }
+			DirectoryTree tree = new DirectoryTree(Folder);
+			return Ok(tree);
+		}
+	}
 }
