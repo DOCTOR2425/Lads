@@ -39,4 +39,11 @@ export class FolderService {
       null
     );
   }
+
+  public createFromText(structure: string): Observable<DirectoryTree> {
+    return this.http.post<DirectoryTree>(
+      `${this.baseApi}create-from-text`,
+      JSON.parse(structure)
+    );
+  }
 }

@@ -50,5 +50,20 @@
         <button type="submit" [disabled]="!newName">Переименовать</button>
       </form>
     </div>
+
+    <div class="form-container struct">
+      <form (ngSubmit)="createFromText()">
+        <h3>Создание папкок из текста</h3>
+        <textarea
+          name="multilineInput"
+          rows="40"
+          cols="50"
+          placeholder="структура в json..."
+          [(ngModel)]="structure"
+        ></textarea>
+        <br />
+        <button type="submit">Создать из текста</button>
+      </form>
+    </div>
   </div>
 </div>

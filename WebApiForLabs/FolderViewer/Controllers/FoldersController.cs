@@ -12,8 +12,7 @@ namespace FolderViewer.Controllers
 		[HttpGet("get-directory")]
 		public async Task<IActionResult> GetDirectory()
 		{
-			DirectoryTree tree = new DirectoryTree(Folder);
-			return Ok(tree);
+			return Ok(new DirectoryTree(Folder));
 		}
 
 		[HttpDelete]
@@ -26,8 +25,7 @@ namespace FolderViewer.Controllers
 			else if (System.IO.File.Exists(target))
 				System.IO.File.Delete(target);
 
-			DirectoryTree tree = new DirectoryTree(Folder);
-			return Ok(tree);
+			return Ok(new DirectoryTree(Folder));
 		}
 
 		[HttpPut]
@@ -45,8 +43,7 @@ namespace FolderViewer.Controllers
 				System.IO.File.Exists(newFullName) == false)
 				System.IO.File.Move(oldName, newFullName);
 
-			DirectoryTree tree = new DirectoryTree(Folder);
-			return Ok(tree);
+			return Ok(new DirectoryTree(Folder));
 		}
 
 		[HttpPost("create")]
@@ -62,8 +59,33 @@ namespace FolderViewer.Controllers
 			else if (System.IO.File.Exists(name) == false)
 				System.IO.File.Create(Folder + name).Close();
 
-			DirectoryTree tree = new DirectoryTree(Folder);
-			return Ok(tree);
+			return Ok(new DirectoryTree(Folder));
+		}
+
+		[HttpPost("create-from-text")]
+		public async Task<IActionResult> CreateFromText([FromBody] DirectoryTree structure)
+		{
+			foreach (var item in Directory.GetFiles(Folder))
+				System.IO.File.Delete(item);
+			foreach (var item in Directory.GetDirectories(Folder))
+				Directory.Delete(item, true);
+
+			CreateDirectory(structure, Folder);
+
+			return Ok(new DirectoryTree(Folder));
+		}
+
+		private void CreateDirectory(DirectoryTree structure, string directory)
+		{
+			foreach (var item in structure.Children)
+			{
+				if (item.Children.Any())
+					Directory.CreateDirectory(directory + '\\' + item.Name);
+				else
+					System.IO.File.Create(directory + '\\' + item.Name).Close();
+
+				CreateDirectory(item, directory + '\\' + item.Name);
+			}
 		}
 	}
 }

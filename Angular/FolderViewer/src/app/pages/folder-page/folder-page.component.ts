@@ -17,6 +17,7 @@ export class FolderPageComponent implements OnInit {
   public selectedObject: string = '';
   public inputName: string = '';
   public newName: string = '';
+  public structure: string = '';
   public selectedObjectType: boolean = true;
 
   @ViewChild('directoryViewer', { static: false }) directoryViewer?: ElementRef;
@@ -27,6 +28,9 @@ export class FolderPageComponent implements OnInit {
       next: (val) => {
         this.directory = val;
         this.selectedObject = this.directory.children[0].name;
+        val.name = 'FolderToView';
+        this.structure = JSON.stringify(val, null, 2);
+
         this.folderService.selectedFolder
           .pipe(
             bufferWhen(() =>
@@ -73,6 +77,15 @@ export class FolderPageComponent implements OnInit {
         this.directory = val;
         this.selectedObject = this.directory.children[0].name;
         this.newName = '';
+      },
+    });
+  }
+
+  public createFromText(): void {
+    this.folderService.createFromText(this.structure).subscribe({
+      next: (val) => {
+        this.directory = val;
+        this.selectedObject = this.directory.children[0].name;
       },
     });
   }
