@@ -1,0 +1,18 @@
+<div class="tree-node" [style.padding-left.px]="level * 20">
+  <div class="node-header" (click)="toggleExpand()">
+    <span *ngIf="node.children" class="expand-icon">
+      {{ expanded ? "▼" : "►" }}
+    </span>
+    <span class="node-name">{{ node.name }}</span>
+  </div>
+
+  <div *ngIf="expanded" class="children-container">
+    <app-directory-tree
+      (click)="selectFolder(child.name, $event)"
+      *ngFor="let child of node.children"
+      [node]="child"
+      [level]="level + 1"
+    >
+    </app-directory-tree>
+  </div>
+</div>

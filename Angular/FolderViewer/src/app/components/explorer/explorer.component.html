@@ -1,0 +1,24 @@
+<div class="directory-explorer">
+  <div class="path-navigation">
+    <button (click)="navigateToRoot()" [disabled]="currentPath.length <= 1">
+      <i class="material-icons">Домой</i>
+    </button>
+    <button (click)="navigateUp()" [disabled]="currentPath.length <= 1">
+      <i class="material-icons">Вверх</i>
+    </button>
+    <span class="current-path">{{ getCurrentPathString() }}</span>
+  </div>
+
+  <div class="directory-contents">
+    <div
+      *ngFor="let item of currentChildren"
+      class="directory-item"
+      [class.file]="!isDirectory(item)"
+      [class.folder]="isDirectory(item)"
+      (click)="navigateTo(item)"
+    >
+      <i class="material-icons">{{ isDirectory(item) ? "folder" : "file" }}</i>
+      <span>{{ item.name }}</span>
+    </div>
+  </div>
+</div>

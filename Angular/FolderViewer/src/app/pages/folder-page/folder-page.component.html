@@ -1,10 +1,16 @@
 <div class="container">
   <div class="left" id="directoryViewer" #directoryViewer>
-    <app-tree-node
+    <!-- <app-tree-node
       *ngIf="directory && directory.children"
       [nodeTree]="directory"
-    ></app-tree-node>
+    ></app-tree-node> -->
+    <app-directory-tree
+      *ngIf="directory"
+      [node]="directory"
+    ></app-directory-tree>
+    <!-- <app-explorer *ngIf="directory" [directory]="directory"></app-explorer> -->
   </div>
+
   <div class="right">
     <div class="select-element">
       {{ selectedObject }}

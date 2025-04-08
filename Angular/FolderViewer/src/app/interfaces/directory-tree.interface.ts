@@ -1,4 +1,4 @@
 export interface DirectoryTree {
   name: string;
-  children: DirectoryTree[];
+  children: DirectoryTree[] | null;
 }

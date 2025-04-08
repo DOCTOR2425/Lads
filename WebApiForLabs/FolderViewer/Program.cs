@@ -1,6 +1,3 @@
-
-using Microsoft.OpenApi.Models;
-
 namespace FolderViewer
 {
     public class Program
@@ -9,16 +6,17 @@ namespace FolderViewer
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers();
-            builder.Services.AddOpenApi();
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add<ExceptionFilter>();
+            });
+            builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
 
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
             {
-                app.MapOpenApi();
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
@@ -32,7 +30,9 @@ namespace FolderViewer
             });
 
             app.UseHttpsRedirection();
-            app.UseAuthorization();
+            app.UseStaticFiles();
+            app.UseRouting();
+
             app.MapControllers();
 
             app.Run();

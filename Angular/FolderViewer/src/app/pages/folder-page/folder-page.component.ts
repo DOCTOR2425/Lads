@@ -5,10 +5,18 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TreeNodeComponent } from '../../components/tree-node/tree-node.component';
 import { bufferWhen, fromEvent } from 'rxjs';
+import { DirectoryTreeComponent } from '../../components/directory-tree/directory-tree.component';
+import { ExplorerComponent } from '../../components/explorer/explorer.component';
 
 @Component({
   selector: 'app-folder-page',
-  imports: [CommonModule, FormsModule, TreeNodeComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    TreeNodeComponent,
+    DirectoryTreeComponent,
+    ExplorerComponent,
+  ],
   templateUrl: './folder-page.component.html',
   styleUrl: './folder-page.component.scss',
 })
@@ -23,13 +31,18 @@ export class FolderPageComponent implements OnInit {
   @ViewChild('directoryViewer', { static: false }) directoryViewer?: ElementRef;
   constructor(private folderService: FolderService) {}
 
+  private processResponse(response: DirectoryTree): void {
+    this.directory = response;
+    // this.selectedObject = this.directory.children![0].name;
+    this.selectedObject = '';
+    response.name = 'FolderToView';
+    this.structure = JSON.stringify(response, null, 2);
+  }
+
   public ngOnInit(): void {
     this.folderService.getDirectory().subscribe({
       next: (val) => {
-        this.directory = val;
-        this.selectedObject = this.directory.children[0].name;
-        val.name = 'FolderToView';
-        this.structure = JSON.stringify(val, null, 2);
+        this.processResponse(val);
 
         this.folderService.selectedFolder
           .pipe(
@@ -45,10 +58,20 @@ export class FolderPageComponent implements OnInit {
             this.selectedObject = this.selectedObject.replace(/\\+$/, '');
           });
       },
+      error: (error) => {
+        alert(error.error.error);
+      },
     });
   }
 
   public create() {
+    for (let char of '\\/:*?"<>|+') {
+      if (this.inputName.includes(char)) {
+        alert('Недопустимый символ ' + char);
+        return;
+      }
+    }
+
     this.folderService
       .create(
         this.selectedObjectType,
@@ -56,8 +79,10 @@ export class FolderPageComponent implements OnInit {
       )
       .subscribe({
         next: (val) => {
-          this.directory = val;
-          this.selectedObject = this.directory.children[0].name;
+          this.processResponse(val);
+        },
+        error: (error) => {
+          alert(error.error.error);
         },
       });
   }
@@ -65,18 +90,25 @@ export class FolderPageComponent implements OnInit {
   public deleteFolder(): void {
     this.folderService.delete(this.selectedObject).subscribe({
       next: (val) => {
-        this.directory = val;
-        this.selectedObject = this.directory.children[0].name;
+        this.processResponse(val);
       },
     });
   }
 
   public changeName(): void {
+    for (let char of '\\/:*?"<>|+') {
+      if (this.newName.includes(char)) {
+        alert('Недопустимый символ ' + char);
+        return;
+      }
+    }
     this.folderService.changeName(this.selectedObject, this.newName).subscribe({
       next: (val) => {
-        this.directory = val;
-        this.selectedObject = this.directory.children[0].name;
+        this.processResponse(val);
         this.newName = '';
+      },
+      error: (error) => {
+        alert(error.error.error);
       },
     });
   }
@@ -84,8 +116,10 @@ export class FolderPageComponent implements OnInit {
   public createFromText(): void {
     this.folderService.createFromText(this.structure).subscribe({
       next: (val) => {
-        this.directory = val;
-        this.selectedObject = this.directory.children[0].name;
+        this.processResponse(val);
+      },
+      error: (error) => {
+        alert(error.error.error);
       },
     });
   }
